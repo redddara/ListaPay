@@ -18,7 +18,7 @@ class EncryptedDatabase {
   Database get database {
     final db = _db;
     if (db == null) {
-      throw const DatabaseException(
+      throw const LocalDatabaseException(
         message: 'Database hindi pa naka-open. Tumawag muna sa init().',
       );
     }

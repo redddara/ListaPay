@@ -1,6 +1,6 @@
 /// Typed application errors for consistent UI messaging and recovery.
 sealed class AppException implements Exception {
-  const AppException(this.message, {this.recoveryHint});
+  const AppException({required this.message, this.recoveryHint});
 
   final String message;
   final String? recoveryHint;
@@ -30,8 +30,8 @@ final class AuthException extends AppException {
   });
 }
 
-final class DatabaseException extends AppException {
-  const DatabaseException({
+final class LocalDatabaseException extends AppException {
+  const LocalDatabaseException({
     super.message = 'May problema sa local database.',
     super.recoveryHint =
         'Subukan i-restart ang app. Kung tuloy pa, i-restore mula sa backup.',

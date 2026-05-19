@@ -203,9 +203,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
     if (txId != null && syncPayload != null) {
       await _sync.enqueueChange(
         entityType: 'transaction',
-        entityId: txId,
+        entityId: txId!,
         operation: 'create',
-        payload: syncPayload,
+        payload: syncPayload!,
       );
     }
 
