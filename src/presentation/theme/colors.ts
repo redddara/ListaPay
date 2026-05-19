@@ -27,6 +27,10 @@ const palette = {
   yellow50: "#FFF7E0",
   yellow500: "#F2B61F",
 
+  blue50: "#EFF6FF",
+  blue500: "#3B82F6",
+  blue600: "#2563EB",
+
   neutral0: "#FFFFFF",
   neutral50: "#FAFAFA",
   neutral100: "#F2F2F3",
@@ -61,6 +65,11 @@ export interface ColorTokens {
   warningMuted: string;
   danger: string;
   dangerMuted: string;
+
+  /** Blue — primary actions, links */
+  action: string;
+  actionMuted: string;
+  onAction: string;
 }
 
 export const lightColors: ColorTokens = {
@@ -84,6 +93,10 @@ export const lightColors: ColorTokens = {
   warningMuted: palette.yellow50,
   danger: palette.red500,
   dangerMuted: palette.red50,
+
+  action: palette.blue500,
+  actionMuted: palette.blue50,
+  onAction: palette.white,
 };
 
 export const darkColors: ColorTokens = {
@@ -107,6 +120,10 @@ export const darkColors: ColorTokens = {
   warningMuted: palette.neutral700,
   danger: palette.red500,
   dangerMuted: palette.red600,
+
+  action: palette.blue500,
+  actionMuted: palette.neutral700,
+  onAction: palette.white,
 };
 
 export { palette };

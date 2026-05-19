@@ -3,10 +3,6 @@ import * as Linking from "expo-linking";
 
 import type { RootStackParamList } from "./types";
 
-/**
- * Deep-linking config. Uses the `listapay://` scheme declared in `app.json`.
- * Extend as new screens come online.
- */
 export const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/"), "listapay://"],
   config: {
@@ -18,11 +14,11 @@ export const linking: LinkingOptions<RootStackParamList> = {
       },
       Main: {
         screens: {
-          Dashboard: "",
-          Sales: "sales",
-          Debts: "debts",
-          Products: "products",
-          Settings: "settings",
+          Home: "home",
+          Sell: "sell",
+          Suki: "suki",
+          Utang: "utang",
+          More: "more",
         },
       },
     },

@@ -6,7 +6,15 @@ import { useTheme, type TypographyVariant } from "@presentation/theme";
 export interface TextProps extends RNTextProps {
   variant?: TypographyVariant;
   /** Use a semantic color token; defaults to `text`. */
-  color?: "text" | "textMuted" | "textInverse" | "primary" | "danger" | "success";
+  color?:
+    | "text"
+    | "textMuted"
+    | "textInverse"
+    | "primary"
+    | "danger"
+    | "success"
+    | "warning"
+    | "action";
 }
 
 /** Themed text. Always prefer this over the raw `react-native` `<Text/>`. */

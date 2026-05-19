@@ -1,20 +1,40 @@
 import type { NavigatorScreenParams } from "@react-navigation/native";
 
-/** Stack for unauthenticated flows (login, signup, recovery). */
 export type AuthStackParamList = {
   Login: undefined;
 };
 
-/** Bottom-tab navigator for the main authenticated app shell. */
-export type MainTabParamList = {
-  Dashboard: undefined;
-  Products: undefined;
-  Sales: undefined;
-  Debts: undefined;
-  Settings: undefined;
+export type SalesStackParamList = {
+  Pos: undefined;
+  Checkout: undefined;
 };
 
-/** Root stack. Picks between auth flow and main app shell. */
+export type CustomersStackParamList = {
+  CustomerList: undefined;
+  CustomerDetail: { customerId: string; customerName: string };
+  AddCustomer: undefined;
+};
+
+export type DebtsStackParamList = {
+  DebtsHome: undefined;
+  CustomerLedger: { customerId: string; customerName: string };
+  UtangDetail: { debtEntryId: string; customerName: string };
+};
+
+export type SettingsStackParamList = {
+  SettingsHome: undefined;
+  Products: undefined;
+  PinSetup: undefined;
+};
+
+export type MainTabParamList = {
+  Home: undefined;
+  Sell: NavigatorScreenParams<SalesStackParamList>;
+  Suki: NavigatorScreenParams<CustomersStackParamList>;
+  Utang: NavigatorScreenParams<DebtsStackParamList>;
+  More: NavigatorScreenParams<SettingsStackParamList>;
+};
+
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;

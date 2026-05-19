@@ -1,7 +1,13 @@
 import type { ID, ISODateString, Money } from "@core/types";
 import type { DebtEntry, DebtStatus } from "@domain/entities";
+import {
+  computeBalance,
+  computeDebtStatus,
+} from "@domain/utils/debtBalance";
 
 import type { UtangRow } from "./UtangRow";
+
+export { computeBalance, computeDebtStatus } from "@domain/utils/debtBalance";
 
 export const utangRowToEntity = (row: UtangRow): DebtEntry => ({
   id: row.id as ID,
@@ -32,14 +38,3 @@ export const debtEntryToRow = (entry: DebtEntry): UtangRow => ({
   created_at: entry.createdAt,
   updated_at: entry.updatedAt,
 });
-
-/** Derive lista status from principal and amount paid. */
-export const computeDebtStatus = (
-  principal: Money,
-  amountPaid: Money,
-): DebtStatus => {
-  const balance = (principal - amountPaid) as Money;
-  if (balance <= 0) return "paid";
-  if (amountPaid > 0) return "partial";
-  return "open";
-};

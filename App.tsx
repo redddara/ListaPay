@@ -1,15 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { isSupabaseConfigured } from "@core/config/env";
+import { logger } from "@core/utils";
+import { AuthProvider } from "@/composition/AuthProvider";
 import { initializeDatabase } from "@data/datasources/local";
 import { getSupabaseClient } from "@data/datasources/remote";
-import { logger } from "@core/utils";
+import { seedDevStoreIfEmpty } from "@data/services/seedDevStore";
 import { RootNavigator } from "@presentation/navigation";
 import { useAppStore } from "@presentation/stores";
-import { ThemeProvider, useTheme } from "@presentation/theme";
+import { usePinStore } from "@presentation/stores/usePinStore";
+import { PinLockOverlay, SplashView } from "@presentation/components";
+import { ThemeProvider } from "@presentation/theme";
 
 const log = logger.scope("app");
 
@@ -25,8 +29,11 @@ const useBootstrap = () => {
     let cancelled = false;
     (async () => {
       try {
-        await initializeDatabase();
+        const db = await initializeDatabase();
         getSupabaseClient();
+        if (!isSupabaseConfigured()) {
+          await seedDevStoreIfEmpty(db);
+        }
         if (!cancelled) {
           setInitialized(true);
           log.info("Bootstrap complete.");
@@ -44,27 +51,28 @@ const useBootstrap = () => {
 };
 
 const AppShell = () => {
-  const theme = useTheme();
   const { isInitialized, initError } = useAppStore();
+  const loadPin = usePinStore((s) => s.load);
   useBootstrap();
 
-  if (initError) {
-    return (
-      <View style={[styles.center, { backgroundColor: theme.colors.background }]}>
-        <ActivityIndicator color={theme.colors.danger} />
-      </View>
-    );
-  }
+  React.useEffect(() => {
+    loadPin();
+  }, [loadPin]);
 
   if (!isInitialized) {
-    return (
-      <View style={[styles.center, { backgroundColor: theme.colors.background }]}>
-        <ActivityIndicator color={theme.colors.primary} />
-      </View>
-    );
+    return <SplashView />;
   }
 
-  return <RootNavigator />;
+  if (initError) {
+    return <SplashView />;
+  }
+
+  return (
+    <AuthProvider>
+      <RootNavigator />
+      <PinLockOverlay />
+    </AuthProvider>
+  );
 };
 
 export default function App() {
@@ -79,7 +87,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-});

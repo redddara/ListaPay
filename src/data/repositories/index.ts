@@ -7,6 +7,7 @@ import { ProductSqliteRepository } from "./ProductSqliteRepository";
 import { SaleSqliteRepository } from "./SaleSqliteRepository";
 import { SyncQueueSqliteRepository } from "./SyncQueueSqliteRepository";
 
+export { AuthSupabaseRepository } from "./AuthSupabaseRepository";
 export { CustomerSqliteRepository } from "./CustomerSqliteRepository";
 export { DebtSqliteRepository } from "./DebtSqliteRepository";
 export { PaymentSqliteRepository } from "./PaymentSqliteRepository";

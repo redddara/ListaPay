@@ -1,49 +1,123 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from "react-native";
 
-import { Button, Screen, Text } from "@presentation/components";
-import { useAuthStore } from "@presentation/stores";
+import { Button, Text } from "@presentation/components/common";
+import { Card, Input, Screen } from "@presentation/components";
+import { useAuth } from "@presentation/hooks";
 import { useTheme } from "@presentation/theme";
 
 export const LoginScreen = () => {
   const theme = useTheme();
-  const setSession = useAuthStore((s) => s.setSession);
+  const {
+    signIn,
+    signUp,
+    devBypass,
+    loading,
+    error,
+    clearError,
+    isSupabaseConfigured,
+  } = useAuth();
+
+  const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+
+  const handleSubmit = async () => {
+    clearError();
+    if (mode === "signIn") await signIn(email, password);
+    else await signUp(email, password, displayName || "Store Owner");
+  };
 
   return (
     <Screen>
-      <View style={{ flex: 1, justifyContent: "center", gap: theme.spacing.lg }}>
-        <Text variant="display" color="primary">
-          ListaPay
-        </Text>
-        <Text variant="body" color="textMuted">
-          Sari-sari store, debt-tracking, and payments — all in your pocket.
-        </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            gap: theme.spacing.lg,
+            paddingVertical: theme.spacing.xl,
+          }}
+        >
+          <Text variant="display" color="primary" style={{ textAlign: "center" }}>
+            ListaPay
+          </Text>
+          <Text variant="bodyLg" color="textMuted" style={{ textAlign: "center" }}>
+            Simple POS & utang for your store
+          </Text>
 
-        <Button
-          label="Continue (placeholder)"
-          fullWidth
-          onPress={() =>
-            setSession({
-              accessToken: "dev",
-              refreshToken: "dev",
-              expiresAt: Date.now() + 3600_000,
-              user: {
-                id: "dev-user" as never,
-                email: "owner@listapay.test",
-                displayName: "Store Owner",
-                role: "owner",
-                storeId: "dev-store" as never,
-                createdAt: new Date().toISOString() as never,
-              },
-            })
-          }
-        />
-
-        <Text variant="caption" color="textMuted">
-          Login UI is intentionally stubbed. Replace with the real auth use
-          case in `domain/usecases/auth/` once that feature is built.
-        </Text>
-      </View>
+          {!isSupabaseConfigured ? (
+            <Card>
+              <Text variant="body" color="textMuted" style={{ marginBottom: 12 }}>
+                Running in offline mode. Add Supabase keys to `.env` for cloud
+                backup.
+              </Text>
+              <Button
+                label="Start offline"
+                size="xl"
+                fullWidth
+                onPress={devBypass}
+              />
+            </Card>
+          ) : (
+            <Card>
+              <Input
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+              <Input
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+              {mode === "signUp" && (
+                <Input
+                  label="Your name"
+                  value={displayName}
+                  onChangeText={setDisplayName}
+                />
+              )}
+              {error && (
+                <Text color="danger" style={{ marginTop: 8 }}>
+                  {error}
+                </Text>
+              )}
+              <Button
+                label={mode === "signIn" ? "Sign in" : "Create account"}
+                size="xl"
+                fullWidth
+                loading={loading}
+                onPress={handleSubmit}
+                style={{ marginTop: 12 }}
+              />
+              <Button
+                label={
+                  mode === "signIn" ? "New store? Sign up" : "Back to sign in"
+                }
+                variant="ghost"
+                fullWidth
+                onPress={() => {
+                  clearError();
+                  setMode(mode === "signIn" ? "signUp" : "signIn");
+                }}
+              />
+            </Card>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };
