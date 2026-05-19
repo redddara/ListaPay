@@ -1,0 +1,63 @@
+name: lista_pay
+description: Secure sari-sari store utang management — production-ready, offline-first.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Firebase
+  firebase_core: ^3.13.0
+  firebase_auth: ^5.5.2
+  cloud_firestore: ^5.6.6
+
+  # Encrypted local database
+  sqflite_sqlcipher: ^3.2.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
+
+  # Security & device
+  flutter_secure_storage: ^9.2.4
+  local_auth: ^2.3.0
+  crypto: ^3.0.6
+
+  # Sync & connectivity
+  connectivity_plus: ^6.1.4
+  workmanager: ^0.5.2
+
+  # Data integrity
+  uuid: ^4.5.1
+  decimal: ^3.2.1
+  intl: ^0.20.2
+
+  # Models
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # Export
+  pdf: ^3.11.3
+  printing: ^5.14.2
+  share_plus: ^10.1.4
+
+  # UI
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.15
+  freezed: ^2.5.8
+  json_serializable: ^6.9.4
+  riverpod_generator: ^2.6.4
+
+flutter:
+  uses-material-design: true
