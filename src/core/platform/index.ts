@@ -1,0 +1,1 @@
+export { getWebSqliteBlocker } from "./webCapabilities";

@@ -1,5 +1,6 @@
 import type { Session } from "@supabase/supabase-js";
 
+import { getAuthRedirectUrl } from "@core/auth";
 import { AuthError, DataError } from "@core/errors";
 import { isSupabaseConfigured } from "@core/config/env";
 import type { ID, ISODateString } from "@core/types";
@@ -93,7 +94,10 @@ export class AuthSupabaseRepository implements IAuthRepository {
     const { data, error } = await this.client.auth.signUp({
       email: email.trim(),
       password,
-      options: { data: { display_name: displayName } },
+      options: {
+        data: { display_name: displayName },
+        emailRedirectTo: getAuthRedirectUrl(),
+      },
     });
 
     if (error) {

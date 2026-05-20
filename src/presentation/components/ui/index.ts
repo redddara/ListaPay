@@ -6,5 +6,6 @@ export * from "./FAB";
 export * from "./Input";
 export * from "./QuickActionButton";
 export * from "./SearchBar";
+export * from "./BootstrapErrorView";
 export * from "./SplashView";
 export * from "./StatCard";

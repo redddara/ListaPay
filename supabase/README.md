@@ -25,6 +25,12 @@ This creates tables, `setup_new_store()` for signup, and **row level security** 
 ## 3. Auth settings
 
 - Enable **Email** provider under Authentication → Providers.
+- Under **Authentication → URL configuration**, set:
+  - **Site URL:** `http://localhost:19006` (web dev — use `npm run web`, not `:8081`)
+  - **Redirect URLs:** `http://localhost:19006`, `http://localhost:19006/**`, and `listapay://` (Expo Go on device)
+- Add `EXPO_PUBLIC_WEB_URL=http://localhost:19006` to `.env` so sign-up emails use the correct confirm link.
+- Confirmation links expire after a short time (default ~1 hour). If a link says **expired**, sign in with email/password or sign up again for a new email.
+- Email confirm while only `npx expo start` is running (`:8081`) will show a database error; run `npm run web` instead.
 - For development, you may disable **Confirm email** so sign-up returns a session immediately.
 
 ## 4. How sync works (offline-first)

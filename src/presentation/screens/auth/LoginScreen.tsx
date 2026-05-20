@@ -9,6 +9,7 @@ import {
 import { Button, Text } from "@presentation/components/common";
 import { Card, Input, Screen } from "@presentation/components";
 import { useAuth } from "@presentation/hooks";
+import { useAuthStore } from "@presentation/stores";
 import { useTheme } from "@presentation/theme";
 
 export const LoginScreen = () => {
@@ -27,9 +28,13 @@ export const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const pendingAuthMessage = useAuthStore((s) => s.pendingAuthMessage);
+  const setPendingAuthMessage = useAuthStore((s) => s.setPendingAuthMessage);
+  const authNotice = error ?? pendingAuthMessage;
 
   const handleSubmit = async () => {
     clearError();
+    setPendingAuthMessage(null);
     if (mode === "signIn") await signIn(email, password);
     else await signUp(email, password, displayName || "Store Owner");
   };
@@ -90,9 +95,9 @@ export const LoginScreen = () => {
                   onChangeText={setDisplayName}
                 />
               )}
-              {error && (
+              {authNotice && (
                 <Text color="danger" style={{ marginTop: 8 }}>
-                  {error}
+                  {authNotice}
                 </Text>
               )}
               <Button
@@ -111,6 +116,7 @@ export const LoginScreen = () => {
                 fullWidth
                 onPress={() => {
                   clearError();
+                  setPendingAuthMessage(null);
                   setMode(mode === "signIn" ? "signUp" : "signIn");
                 }}
               />
